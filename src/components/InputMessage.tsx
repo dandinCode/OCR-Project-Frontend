@@ -8,7 +8,7 @@ interface InputMessageProps {
 }
 
 const InputMessage: React.FC<InputMessageProps>  = ({document, checkNewMessage}) => {
-  const [prompt, setPrompt] = useState<string | null>(null);
+  const [prompt, setPrompt] = useState<string>(""); 
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

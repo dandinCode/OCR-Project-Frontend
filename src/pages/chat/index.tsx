@@ -11,7 +11,7 @@ import DownloadButton from "@/components/DownloadButton";
 
 const Chat = () => {
   const [documentId, setDocumentId] = useState<string | null>(null);
-  const [documentData, setDocumentData] = useState<{} | null>({userId: ""});
+  const [documentData, setDocumentData] = useState<{ userId: string } | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [userId, setUserId] = useState<string | null>();
   const router = useRouter();
@@ -41,7 +41,7 @@ const Chat = () => {
   }
 
   function valideUser(){
-    if (documentData && (documentData.userId !== "") && userId !== documentData.userId) { 
+    if (documentData && documentData.userId && (documentData.userId !== "") && userId !== documentData.userId) { 
       router.push("/home"); 
     }
   }

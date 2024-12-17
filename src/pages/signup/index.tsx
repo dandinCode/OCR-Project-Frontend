@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 export default function SignUp() {
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -31,7 +31,7 @@ export default function SignUp() {
           className="px-3 py-1 rounded"
           type="email"
           placeholder="Email"
-          value={email}
+          value={email ? email : ""}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
@@ -41,7 +41,7 @@ export default function SignUp() {
           className="px-3 py-1 rounded"
           type="password"
           placeholder="Senha"
-          value={password}
+          value={password ? password : ""}
           onChange={(e) => setPassword(e.target.value)}
           required
         />

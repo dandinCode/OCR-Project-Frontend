@@ -11,7 +11,7 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
   
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>();
+  const [userId, setUserId] = useState<string | null>("");
 
   useEffect(()=>{
     const token = localStorage.getItem("token"); 
@@ -36,7 +36,7 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
   
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("userId", userId);
+    formData.append("userId", userId ?? "");
   
     try {
       setStatus("Escaneando...");
