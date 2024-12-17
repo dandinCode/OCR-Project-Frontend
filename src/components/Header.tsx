@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 const Header = () => {
   const router = useRouter();
-  const [logged, setLogged] = useState<Boolean | null>(true);
+  const [logged, setLogged] = useState<boolean | null>(true);
 
   const checkRoute = () => {
     const isAuthRoute = router.pathname === "/signin" || router.pathname === "/signup";

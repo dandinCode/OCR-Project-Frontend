@@ -1,17 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import UploadForm from "../../components/UploadForm";
-import ExtractedDoc from "@/components/ExtractedDoc";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-const home = () => {
-  const [documentId, setDocumentId] = useState<string | null>(null);
-
-  function handleDocumentId(id: string){
-    setDocumentId(id);
-  }
+const Home = () => {
 
   return (
     <ProtectedRoute>
@@ -38,4 +30,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

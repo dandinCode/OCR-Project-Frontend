@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/router";
 import Message from "@/components/Message";
+import DownloadButton from "@/components/DownloadButton";
 
 const Chat = () => {
   const [documentId, setDocumentId] = useState<string | null>(null);
@@ -80,8 +81,6 @@ const Chat = () => {
       );
 
       const data = await response.json();
-      console.log(documentId)
-      console.log(data)
       if (response.ok) {
         if (Array.isArray(data)) { 
           setMessages(data);
@@ -105,6 +104,9 @@ const Chat = () => {
 
   return (
     <div className="bg-slate-200 pb-5">
+      <div title="Baixar documento" className="grid justify-items-end"> 
+        <DownloadButton documentId={documentId}/>
+      </div>
       <h1 className="text-2xl font-bold text-center">Chat</h1>
       <ExtractedDoc documentId={documentId} />
       <InputMessage document={documentData} checkNewMessage={checkNewMessage}/>
