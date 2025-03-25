@@ -4,6 +4,7 @@ import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import ConfigDropdown from "./ConfigDropdown";
 
 const Header = () => {
   const router = useRouter();
@@ -32,11 +33,15 @@ const Header = () => {
           <Link href="/home">OCR Project</Link>
         </h1>
       </div>
-      {logged && (
-        <div title="Logout">
-          <LogoutButton />
-        </div>
-      )}
+      <div>
+        {logged && (
+          <>
+              <span className="inline-block mr-4"> 
+                <ConfigDropdown />
+              </span>
+          </>
+        )}
+      </div>
     </header>
   );
 };
