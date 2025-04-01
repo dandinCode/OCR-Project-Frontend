@@ -25,8 +25,6 @@ const InputMessage: React.FC<InputMessageProps>  = ({document, checkNewMessage})
     }
   };
 
-
-
   return (
      <form onSubmit={handleSignUp} className="text-center py-2">
         <input

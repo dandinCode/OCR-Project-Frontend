@@ -104,7 +104,7 @@ const Chat = () => {
 
   return (
     <div className="bg-slate-200 pb-5">
-      <div title="Baixar documento" className="grid justify-items-end"> 
+      <div className="grid justify-items-end"> 
         <DownloadButton documentId={documentId}/>
       </div>
       <h1 className="text-2xl font-bold text-center">Chat</h1>
