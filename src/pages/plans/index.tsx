@@ -100,7 +100,7 @@ const Plans = () => {
                       
                     </p>
                     
-                    <p className="text-gray-600 mb-6">{plan.tokens} tokens </p>
+                    <p className="text-gray-600 mb-6">{plan.tokens.toLocaleString("pt-BR")} tokens </p>
                     
                     {plan.name !== "Gratuito" && (
                         <>

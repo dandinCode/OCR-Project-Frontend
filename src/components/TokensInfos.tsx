@@ -51,7 +51,7 @@ const TokensInfos: React.FC<TokensInfosProps>  = ({maxTokens}) => {
 
         <div className="p-5">
             <h3 className="text-xl font-semibold text-gray-800">
-                Atualmente você possui {maxTokens && <>{maxTokens}</>} tokens restantes🚀
+                Atualmente você possui {maxTokens && <>{maxTokens.toLocaleString("pt-BR")}</>} tokens restantes🚀
             </h3>
         </div>
     </div>
