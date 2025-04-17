@@ -56,10 +56,9 @@ const Plans = () => {
           );
     
           const data = await response.json();
-          if (response.ok) {
+          if (data.success) {
             if (data) { 
-                setUserData(data);
-                console.log(data)
+                setUserData(data.user);
             } else {
                 setUserData([]); 
             }

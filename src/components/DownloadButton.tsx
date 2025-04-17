@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-interface DownloadButtonProps {documentId: string | null}
+interface DownloadButtonProps {chatId: string | null}
 
-const DownloadButton: React.FC<DownloadButtonProps>  = ({documentId}) => {
+const DownloadButton: React.FC<DownloadButtonProps>  = ({chatId}) => {
 
   const handleDownload = () => {
-    if (!documentId) {
+    if (!chatId) {
         console.error("Document ID is missing");
         return;
     }
-    const downloadUrl = `${process.env.NEXT_PUBLIC_API_URL}/upload/download/${documentId}`;
+    const downloadUrl = `${process.env.NEXT_PUBLIC_API_URL}/upload/download/${chatId}`;
     window.open(downloadUrl, '_blank');
   };
 

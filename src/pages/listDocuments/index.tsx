@@ -35,9 +35,9 @@ const UploadList = () => {
       );
 
       const data = await response.json();
-
-      if (response.ok) {
-        setDocuments(data);
+      
+      if (data.success) {
+        setDocuments(data.result);
       } else {
         console.error("Erro ao buscar documentos:", data.message || "Erro desconhecido");
       }
@@ -61,7 +61,7 @@ const UploadList = () => {
                 <Link
                   href={{
                     pathname: "/chat",
-                    query: { documentId: document.id },
+                    query: { chatId: document.chatId },
                   }}
                 >
                   <p>
