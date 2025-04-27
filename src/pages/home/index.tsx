@@ -19,7 +19,7 @@ const Home = () => {
                 </div>
                 <div className="my-5 ">
                     <button className="bg-gray-800 text-white px-3 py-1 rounded mt-3" >
-                        <Link href='/listDocuments'>
+                        <Link href='/listChats'>
                             Acessar documentos escaneados
                         </Link>
                     </button>

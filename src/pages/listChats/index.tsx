@@ -28,7 +28,7 @@ const UploadList = () => {
   const getDocumentData = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/upload/list/?userId=${userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/listChats/${userId}`,
         {
           method: "GET",
         }
@@ -37,7 +37,10 @@ const UploadList = () => {
       const data = await response.json();
       
       if (data.success) {
-        setDocuments(data.result);
+        const sortedChats = data.chats.sort((a: any, b: any) => {
+          return new Date(b.accessed).getTime() - new Date(a.accessed).getTime();
+        });
+        setDocuments(sortedChats);
       } else {
         console.error("Erro ao buscar documentos:", data.message || "Erro desconhecido");
       }
@@ -51,7 +54,7 @@ const UploadList = () => {
   return (
     <ProtectedRoute>
       <div className="bg-slate-200 text-2xl text-center">
-        <h1 className="font-bold pb-2">Histórico de Imagens</h1>
+        <h1 className="font-bold py-2">Últimos acessos</h1>
         {loading ? (
           <p>Carregando...</p>
         ) : documents && documents.length > 0 ? (
@@ -61,11 +64,11 @@ const UploadList = () => {
                 <Link
                   href={{
                     pathname: "/chat",
-                    query: { chatId: document.chatId },
+                    query: { chatId: document.id },
                   }}
                 >
                   <p>
-                    {document.name} ({format(new Date(document.createdAt), "yyyy-MM-dd | HH:mm")})
+                    {document.name} ({format(new Date(document.accessed), "yyyy-MM-dd | HH:mm")})
                   </p>
                 </Link>
                 <br />
