@@ -3,11 +3,12 @@
 import { useState } from "react";
 
 interface InputMessageProps {
-  document: {} | null,
+  userId: string | null,
+  chatId: string | null,
   checkNewMessage: () => void; 
 }
 
-const InputMessage: React.FC<InputMessageProps>  = ({document, checkNewMessage}) => {
+const InputMessage: React.FC<InputMessageProps>  = ({userId, chatId, checkNewMessage}) => {
   const [prompt, setPrompt] = useState<string>(""); 
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -16,7 +17,7 @@ const InputMessage: React.FC<InputMessageProps>  = ({document, checkNewMessage})
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/openai/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, document }),
+      body: JSON.stringify({ prompt, userId, chatId }),
     });
 
     if (res.ok) {

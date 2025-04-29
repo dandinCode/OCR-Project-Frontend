@@ -4,14 +4,20 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 interface UploadFormProps {
-  handleDocumentId: (documentId: string) => void; 
+  handleChatId: (chatId: string) => void; 
 }
 
-const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
+interface UserData {
+  email: string;
+  chosenPlan: string;
+}
+
+const UploadForm: React.FC<UploadFormProps>  = ({handleChatId}) => {
   
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>("");
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(()=>{
     const token = localStorage.getItem("token"); 
@@ -35,7 +41,14 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
     }
   
     const formData = new FormData();
-    formData.append("file", file);
+    
+    const input = document.getElementById('file') as HTMLInputElement;
+    if (input?.files) {
+      Array.from(input.files).forEach((f) => {
+        formData.append("file", f); 
+      });
+    }
+  
     formData.append("userId", userId ?? "");
   
     try {
@@ -46,10 +59,9 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
       });
   
       const data = await response.json();
-  
-      if (response.ok) {
+      if (data.success) {
         setStatus("Texto extraído com sucesso!");
-        handleDocumentId(data.documentId)
+        handleChatId(data.chatId)
       } else {
         setStatus("Erro ao processar o arquivo: " + data.error);
       }
@@ -58,6 +70,30 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
     }
   };
   
+  async function getUserData() {
+    if (!userId) {
+      return;
+    }
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/app/${userId}`,
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+          setUserData(data.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    getUserData();
+  }, [userId])
 
 
   return (
@@ -66,13 +102,25 @@ const UploadForm: React.FC<UploadFormProps>  = ({handleDocumentId}) => {
         <label htmlFor="file" className="block text-sm font-medium text-gray-700">
           Escolha um arquivo para upload
         </label>
-        <input
-          type="file"
-          id="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
-        />
+        {userData && userData.chosenPlan == "Gratuito" ?
+            <input
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+            />
+          :
+            <input
+              type="file"
+              multiple 
+              id="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+            />
+        }
+        
         <button
           type="submit"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"

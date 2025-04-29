@@ -10,17 +10,19 @@ import Message from "@/components/Message";
 import DownloadButton from "@/components/DownloadButton";
 
 const Chat = () => {
-  const [documentId, setDocumentId] = useState<string | null>(null);
+  const [chatId, setChatId] = useState<string | null>(null);
   const [documentData, setDocumentData] = useState<{ userId: string } | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
-  const [userId, setUserId] = useState<string | null>();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [chatName, setChatName] = useState<string>("");
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const id = searchParams.get("documentId");
+    const id = searchParams.get("chatId");
     if (id) {
-      setDocumentId(id);
+      setChatId(id);
+      getChatName(id)
     }
   }, [searchParams]);
 
@@ -36,6 +38,19 @@ const Chat = () => {
     valideUser();
   }, [documentData, userId]);
 
+  async function getChatName(id: string){
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/chat/${id}`,
+      {
+        method: "GET",
+      }
+    );
+    const data = await response.json();
+    if (data.success) {
+      setChatName(data.chat.name);
+    }
+  }
+
   function checkNewMessage(){
     getMessages();
   }
@@ -46,35 +61,13 @@ const Chat = () => {
     }
   }
 
-  async function getDocumentData() {
-    if (!documentId) {
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/upload/image/${documentId}`,
-        {
-          method: "GET",
-        }
-      );
-
-      const data = await response.json();
-      if (response.ok) {
-        setDocumentData(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function getMessages() {
-    if (!documentId) {
+    if (!chatId) {
       return;
     }
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/openai/messages/${documentId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/openai/messages/${chatId}`,
         {
           method: "GET",
         }
@@ -95,21 +88,43 @@ const Chat = () => {
 
 
   useEffect(() => {
-    if(documentId){
-      getDocumentData();
+    if(chatId){
       getMessages();
     }
    
-  }, [documentId]);
+  }, [chatId]);
+
+  async function updateChatName(name: string){
+    try{
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatId, name }),
+      });
+    }  catch(error){
+        console.error(error);
+    }
+  }
 
   return (
     <div className="bg-slate-200 pb-5">
       <div className="grid justify-items-end"> 
-        <DownloadButton documentId={documentId}/>
+        <DownloadButton chatId={chatId}/>
       </div>
-      <h1 className="text-2xl font-bold text-center">Chat</h1>
-      <ExtractedDoc documentId={documentId} />
-      <InputMessage document={documentData} checkNewMessage={checkNewMessage}/>
+      <h1 className="text-2xl font-bold text-center">
+        <input 
+          title="Clique para editar o nome do chat"
+          type="text"
+          className="bg-inherit text-center"
+          placeholder="Digite um nome para o chat"
+          value={chatName}
+          onChange={(e) => setChatName(e.target.value)}
+          onBlur={(e) => updateChatName(e.target.value)}
+          required
+        />
+      </h1>
+      <ExtractedDoc chatId={chatId} />
+      <InputMessage userId={userId} chatId={chatId} checkNewMessage={checkNewMessage}/>
       {messages && 
         <div>
           {messages.map((message: any) => (
