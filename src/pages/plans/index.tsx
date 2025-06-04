@@ -7,9 +7,16 @@ import { jwtDecode } from "jwt-decode";
 import TokensInfos from "@/components/TokensInfos";
 
 const Plans = () => {
-    
     const [plans, setPlans] = useState<any[]>([]);
     const [userData, setUserData] = useState<any>();
+
+    const colorMap: Record<string, string> = {
+      stone: "bg-stone-500 hover:bg-stone-600",
+      slate: "bg-slate-500 hover:bg-slate-600",
+      amber: "bg-amber-500 hover:bg-amber-600",
+      gray: "bg-gray-500 hover:bg-gray-600",
+      yellow: "bg-yellow-500 hover:bg-yellow-600",
+    };
     
     useEffect(()=>{
         getPlans();
@@ -143,7 +150,7 @@ const Plans = () => {
                       <>
                         <Link 
                           href={((plan.paymentLinks)+'?client_reference_id='+userData.id)} 
-                          className={`bg-${plan.themeColor}-500 hover:bg-${plan.themeColor}-600 text-white font-bold py-3 px-6 rounded-lg w-full block text-center transition-colors`}
+                          className={`${colorMap[plan.themeColor] || "bg-gray-500 hover:bg-gray-600"} text-white font-bold py-3 px-6 rounded-lg w-full block text-center transition-colors`}
                         >
                             {plan.name === "Gratuito" ? 
                               <>
